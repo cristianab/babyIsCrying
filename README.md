@@ -7,4 +7,6 @@
 3.  ```shell
         pip install requests
         pip install python-firebase
+        pip install firebase-admin
     ```
+4. set sys var GOOGLE_APPLICATION_CREDENTIALS - path/to/json/from/git/bla.json
