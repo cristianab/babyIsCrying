@@ -6,48 +6,48 @@ firebase_admin.initialize_app(options={
     'databaseURL': 'https://babyiscrying-58c27.firebaseio.com',
 })
 
-SUPERHEROES = db.reference('superheroes')
+NOTIFICATIONS = db.reference('updates')
 
-def create_hero(request):
+def create_notification(request):
     req = request.json
-    hero = SUPERHEROES.push(req)
-    return flask.jsonify({'id': hero.key}), 201
+    notification = NOTIFICATIONS.push(req)
+    return flask.jsonify({'id': notification.key}), 201
 
-def read_hero(id):
-    hero = SUPERHEROES.child(id).get()
-    if not hero:
+def read_notification(id):
+    notification = NOTIFICATIONS.child(id).get()
+    if not notification:
         return 'Resource not found', 404
-    return flask.jsonify(hero)
+    return flask.jsonify(notification)
 
-def update_hero(id, request):
-    hero = SUPERHEROES.child(id).get()
-    if not hero:
+def update_notification(id, request):
+    notification = NOTIFICATIONS.child(id).get()
+    if not notification:
         return 'Resource not found', 404
     req = request.json
-    SUPERHEROES.child(id).update(req)
+    NOTIFICATIONS.child(id).update(req)
     return flask.jsonify({'success': True})
 
-def delete_hero(id):
-    hero = SUPERHEROES.child(id).get()
-    if not hero:
+def delete_notification(id):
+    notification = NOTIFICATIONS.child(id).get()
+    if not notification:
         return 'Resource not found', 404
-    SUPERHEROES.child(id).delete()
+    NOTIFICATIONS.child(id).delete()
     return flask.jsonify({'success': True})
 
-def heroes(request):
+def mainFunc(request):
     if request.path == '/' or request.path == '':
         if request.method == 'POST':
-            return create_hero(request)
+            return create_notification(request)
         else:
             return 'Method not supported', 405
     if request.path.startswith('/'):
         id = request.path.lstrip('/')
         if request.method == 'GET':
-            return read_hero(id)
+            return read_notification(id)
         elif request.method == 'DELETE':
-            return delete_hero(id)
+            return delete_notification(id)
         elif request.method == 'PUT':
-            return update_hero(id, request)
+            return update_notification(id, request)
         else:
             return 'Method not supported', 405
     return 'URL not found', 404
